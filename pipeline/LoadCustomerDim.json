@@ -68,11 +68,11 @@
 									"storeSettings": {
 										"type": "AzureBlobFSReadSettings",
 										"recursive": true,
-										"wildcardFolderPath": {
+										"wildcardFolderPath": "customer_raw_data",
+										"wildcardFileName": {
 											"value": "@item().name",
 											"type": "Expression"
 										},
-										"wildcardFileName": "*",
 										"enablePartitionDiscovery": false
 									},
 									"formatSettings": {
