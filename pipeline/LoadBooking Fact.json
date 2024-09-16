@@ -23,7 +23,8 @@
 						"linkedService": {
 							"referenceName": "AirBnBADLS",
 							"type": "LinkedServiceReference"
-						}
+						},
+						"folderPath": "airbnb/synapse_stage"
 					},
 					"compute": {
 						"coreCount": 8,
