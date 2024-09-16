@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "customer_data_2024_08_29_06_58.csv",
 				"folderPath": "customer_raw_data",
 				"fileSystem": "airbnb"
 			},
