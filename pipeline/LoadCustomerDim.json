@@ -207,6 +207,13 @@
 									"referenceName": "CustomerDataRaw",
 									"type": "DatasetReference"
 								},
+								"logStorageSettings": {
+									"linkedServiceName": {
+										"referenceName": "AirBnBADLS",
+										"type": "LinkedServiceReference"
+									},
+									"path": ""
+								},
 								"enableLogging": true,
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
