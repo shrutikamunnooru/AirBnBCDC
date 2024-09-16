@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "airbnbproject123"
+		},
+		"AzureSynapseAnalytics_password": {
+			"value": ""
+		},
+		"CosmosDb_connectionString": {
+			"value": ""
+		},
+		"AirBnBADLS_properties_typeProperties_url": {
+			"value": "https://airbnbdata123.dfs.core.windows.net/"
+		},
+		"AzureSynapseAnalytics_properties_typeProperties_server": {
+			"value": "synapsegdsworkspace.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics_properties_typeProperties_database": {
+			"value": "SQLPool"
+		},
+		"AzureSynapseAnalytics_properties_typeProperties_userName": {
+			"value": "sqladminuser"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
