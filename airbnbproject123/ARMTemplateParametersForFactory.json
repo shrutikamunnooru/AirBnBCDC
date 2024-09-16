@@ -5,9 +5,6 @@
 		"factoryName": {
 			"value": "airbnbproject123"
 		},
-		"AzureSynapseAnalytics_password": {
-			"value": ""
-		},
 		"CosmosDb_connectionString": {
 			"value": ""
 		},
@@ -19,9 +16,6 @@
 		},
 		"AzureSynapseAnalytics_properties_typeProperties_database": {
 			"value": "SQLPool"
-		},
-		"AzureSynapseAnalytics_properties_typeProperties_userName": {
-			"value": "sqladminuser"
 		}
 	}
 }

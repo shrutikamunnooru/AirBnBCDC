@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "airbnbproject123"
 		},
-		"AzureSynapseAnalytics_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AzureSynapseAnalytics'"
-		},
 		"CosmosDb_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'CosmosDb'"
@@ -26,10 +22,6 @@
 		"AzureSynapseAnalytics_properties_typeProperties_database": {
 			"type": "string",
 			"defaultValue": "SQLPool"
-		},
-		"AzureSynapseAnalytics_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "sqladminuser"
 		},
 		"containerUri": {
 			"type": "string",
@@ -58,9 +50,6 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AzureSynapseAnalytics_password": {
-						"value": "[parameters('AzureSynapseAnalytics_password')]"
-					},
 					"CosmosDb_connectionString": {
 						"value": "[parameters('CosmosDb_connectionString')]"
 					},
@@ -72,9 +61,6 @@
 					},
 					"AzureSynapseAnalytics_properties_typeProperties_database": {
 						"value": "[parameters('AzureSynapseAnalytics_properties_typeProperties_database')]"
-					},
-					"AzureSynapseAnalytics_properties_typeProperties_userName": {
-						"value": "[parameters('AzureSynapseAnalytics_properties_typeProperties_userName')]"
 					}
 				}
 			},
