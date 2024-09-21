@@ -24,7 +24,7 @@
 							"referenceName": "AirBnBADLS",
 							"type": "LinkedServiceReference"
 						},
-						"folderPath": "airbnb/synapse_stage"
+						"folderPath": ""
 					},
 					"compute": {
 						"coreCount": 8,
