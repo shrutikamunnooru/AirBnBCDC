@@ -10,36 +10,18 @@
 						"type": "DatasetReference"
 					},
 					"name": "BookingData"
-				}
-			],
-			"sinks": [
+				},
 				{
-					"dataset": {
-						"referenceName": "BookingFactDataSynapse",
-						"type": "DatasetReference"
-					},
-					"name": "SynapseFactWrite",
-					"rejectedDataLinkedService": {
-						"referenceName": "AirBnBADLS",
-						"type": "LinkedServiceReference"
-					}
+					"name": "source1"
 				}
 			],
+			"sinks": [],
 			"transformations": [
 				{
 					"name": "FilteringRecords"
 				},
 				{
-					"name": "DerivedColumn"
-				},
-				{
-					"name": "LookupInSynapse"
-				},
-				{
-					"name": "AlterRowForUpdate"
-				},
-				{
-					"name": "FinalColumns"
+					"name": "DerviedColumns"
 				}
 			],
 			"scriptLines": [
@@ -61,12 +43,14 @@
 				"     enableChangeFeed: true,",
 				"     changeFeedStartFromTheBeginning: false,",
 				"     format: 'document') ~> BookingData",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source1",
 				"BookingData split(check_out_date<check_in_date,",
 				"     disjoint: false) ~> FilteringRecords@(BadRecords, AcceptedRecords)",
-				"FilteringRecords@AcceptedRecords derive(stay_duration = (toTimestamp(check_out_date) - toTimestamp(check_in_date)) / 86400000,",
+				"FilteringRecords@AcceptedRecords derive(stay_duration = (toTimestamp(check_out_date) - toTimestamp(check_in_date)),",
 				"          booking_year = year(booking_date),",
 				"          booking_month = month(booking_date),",
-				"          full_address = concat(property_location.city, ',', property_location.country),",
+				"          full_address = concat(property_location.city,',', property_location.country),",
 				"          city = property_location.city,",
 				"          country = property_location.country,",
 				"          booking_id = booking_id,",
@@ -78,65 +62,7 @@
 				"          check_in_date = check_in_date,",
 				"          property_id = property_id,",
 				"          amount = amount,",
-				"          currency = currency) ~> DerivedColumn",
-				"DerivedColumn lookup(DerivedColumn@booking_id == SynapseforLookup@booking_id,",
-				"     multiple: false,",
-				"     pickup: 'first',",
-				"     desc(SynapseforLookup@timestamp, true),",
-				"     broadcast: 'auto')~> LookupInSynapse",
-				"LookupInSynapse alterRow(insertIf(isNull(SynapseforLookup@booking_id)),",
-				"     updateIf(not(isNull(SynapseforLookup@booking_id)))) ~> AlterRowForUpdate",
-				"AlterRowForUpdate select(mapColumn(",
-				"          check_out_date,",
-				"          customer_id,",
-				"          timestamp,",
-				"          owner_id,",
-				"          check_in_date,",
-				"          property_id,",
-				"          amount,",
-				"          booking_id,",
-				"          currency,",
-				"          booking_date,",
-				"          stay_duration,",
-				"          booking_year,",
-				"          booking_month,",
-				"          full_address,",
-				"          city,",
-				"          country",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FinalColumns",
-				"FinalColumns sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     input(",
-				"          booking_id as string,",
-				"          property_id as string,",
-				"          customer_id as integer,",
-				"          owner_id as string,",
-				"          check_in_date as date,",
-				"          check_out_date as date,",
-				"          booking_date as timestamp,",
-				"          amount as double,",
-				"          currency as string,",
-				"          city as string,",
-				"          country as string,",
-				"          full_address as string,",
-				"          stay_duration as long,",
-				"          booking_year as integer,",
-				"          booking_month as integer,",
-				"          timestamp as timestamp",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:true,",
-				"     upsertable:false,",
-				"     keys:['booking_id'],",
-				"     format: 'table',",
-				"     staged: true,",
-				"     allowCopyCommand: true,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> SynapseFactWrite"
+				"          currency = currency) ~> DerviedColumns"
 			]
 		}
 	}
