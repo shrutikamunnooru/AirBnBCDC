@@ -12,7 +12,11 @@
 					"name": "BookingData"
 				},
 				{
-					"name": "source1"
+					"dataset": {
+						"referenceName": "BookingFactDataSynapse",
+						"type": "DatasetReference"
+					},
+					"name": "SynapseForLookup"
 				}
 			],
 			"sinks": [],
@@ -22,6 +26,12 @@
 				},
 				{
 					"name": "DerviedColumns"
+				},
+				{
+					"name": "LookupinSynapse"
+				},
+				{
+					"name": "AlterRowUpdate"
 				}
 			],
 			"scriptLines": [
@@ -43,8 +53,29 @@
 				"     enableChangeFeed: true,",
 				"     changeFeedStartFromTheBeginning: false,",
 				"     format: 'document') ~> BookingData",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> source1",
+				"source(output(",
+				"          booking_id as string,",
+				"          property_id as string,",
+				"          customer_id as integer,",
+				"          owner_id as string,",
+				"          check_in_date as date,",
+				"          check_out_date as date,",
+				"          booking_date as timestamp,",
+				"          amount as double,",
+				"          currency as string,",
+				"          city as string,",
+				"          country as string,",
+				"          full_address as string,",
+				"          stay_duration as long,",
+				"          booking_year as integer,",
+				"          booking_month as integer,",
+				"          timestamp as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table',",
+				"     staged: true) ~> SynapseForLookup",
 				"BookingData split(check_out_date<check_in_date,",
 				"     disjoint: false) ~> FilteringRecords@(BadRecords, AcceptedRecords)",
 				"FilteringRecords@AcceptedRecords derive(stay_duration = (toTimestamp(check_out_date) - toTimestamp(check_in_date)),",
@@ -62,7 +93,14 @@
 				"          check_in_date = check_in_date,",
 				"          property_id = property_id,",
 				"          amount = amount,",
-				"          currency = currency) ~> DerviedColumns"
+				"          currency = currency) ~> DerviedColumns",
+				"DerviedColumns, SynapseForLookup lookup(DerviedColumns@booking_id == SynapseForLookup@booking_id,",
+				"     multiple: false,",
+				"     pickup: 'first',",
+				"     desc(SynapseLookup@timestamp, true),",
+				"     broadcast: 'auto')~> LookupinSynapse",
+				"LookupinSynapse alterRow(insertIf(isNull(SynapseForLookup@booking_id)),",
+				"     updateIf(not(isNull(SynapseForLookup@booking_id)))) ~> AlterRowUpdate"
 			]
 		}
 	}
